@@ -22,7 +22,9 @@
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
-
+    <div class="bg">
+      <img :src="seller.avatar"/>
+    </div>
   </div>
 </template>
 
@@ -46,7 +48,10 @@
   @import "../../common/stylus/main.styl";
 
   .header
-    background-color: #000
+    position: relative
+    width: 100%
+    height: 100%
+    background-color: rgba(7, 17, 27, 0.5)
     .content-wrapper
       padding: 24px 24px
       font-size: 0
@@ -105,8 +110,45 @@
             color: rgb(255, 255, 255)
             font-weight: 200
     .bulletin-wrapper
+      position: relative
+      height: 28px
+      line-height: 28px
+      padding: 0 22px 0 12px
+      color: #fff
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      background: rgba(7, 17, 27, 0.2)
       .bulletin-title
+        display: inline-block
+        width: 18px
+        height 12px
         background-size: 18px 12px
         background-repeat: no-repeat
         bg-image('bulletin')
+      .bulletin-text
+        vertical-align: top
+        margin: 0 4px
+        font-size: 10px
+        text-overflow: ellipsis
+      .icon-keyboard_arrow_right
+        position: absolute
+        color: #fff
+        font-size: 10px
+        top: 7px
+        right: 12px
+    .bg
+      position: absolute
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      filter: blur(10px)
+      -webkit-filter: blur(10px)
+      z-index: -1
+      img
+        width: 100%
+        height: 100%;
+
+
 </style>
