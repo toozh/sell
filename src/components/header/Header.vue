@@ -17,6 +17,10 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
+      <div v-if="seller.supports" class="supports-more" @click="toggleDetails">
+        <span>{{seller.supports.length}}个</span>
+        <i class="icon-keyboard_arrow_right"></i>
+      </div>
     </div>
     <div class="bulletin-wrapper">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
@@ -25,16 +29,70 @@
     <div class="bg">
       <img :src="seller.avatar"/>
     </div>
+    <transition name="fade">
+      <div v-show="detailsShow" ref="detail" class="details">
+        <div class="details-wrapper clearfix">
+          <div class="name">{{seller.name}}</div>
+          <div class="details-main">
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <div class="supports">
+              <ul>
+                <li v-for="support in seller.supports"><span class="icon" :class="classMap[support.type]"></span>{{support.description}}</li>
+              </ul>
+            </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p>{{seller.bulletin}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="details-close">
+          <i class="icon-close" @click="toggleDetails"></i>
+        </div>
+      </div>
+    </transition>
+
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+
+  import BScroll from 'better-scroll';
+
   export default {
     name: 'header',
     data () {
       return {
-        classMap: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+        classMap: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
+        detailsShow: false
       };
+    },
+    created () {
+
+    },
+    watch: {
+      seller () {
+      }
+    },
+    ready () {
+    },
+    methods: {
+      _initScroll () {
+        console.log(this.$refs);
+        this.scroll = new BScroll(this.$refs.detail, {
+        });
+      },
+      toggleDetails () {
+        this.detailsShow = !this.detailsShow;
+      }
     },
     props: {
       seller: {
@@ -53,6 +111,7 @@
     height: 100%
     background-color: rgba(7, 17, 27, 0.5)
     .content-wrapper
+      position: relative
       padding: 24px 24px
       font-size: 0
       .avatar
@@ -109,6 +168,19 @@
             font-size: 10px
             color: rgb(255, 255, 255)
             font-weight: 200
+      .supports-more
+        position: absolute
+        bottom: 14px
+        right: 12px
+        height: 24px
+        font-size: 10px
+        line-height 24px
+        border-radius: 14px
+        color: rgb(255, 255, 255)
+        background-color: rgba(0, 0, 0, 0.2)
+        padding: 0px 8px
+        text-align: center
+
     .bulletin-wrapper
       position: relative
       height: 28px
@@ -149,6 +221,89 @@
       img
         width: 100%
         height: 100%;
-
+    .details
+      position: fixed
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      backdrop-filter: blur(10px)
+      overflow-y: scroll
+      transition: all 0.5s
+      background: rgba(7, 17, 27, 0.8)
+      &.fade-enter-active
+        opacity: 1
+        background: rgba(7, 17, 27, 0.8)
+      &.fade-enter, &.fade-leave-active
+        opacity: 0
+        background: rgba(7, 17, 27, 0)
+      .details-wrapper
+        width: 100%
+        min-height: 100%
+        margin-bottom: -64px
+        .name
+          font-size: 16px
+          font-weight: 700
+          color: rgb(255, 255, 255)
+          line-height: 16px
+          margin: 64px auto 16px auto
+          text-align: center
+        .details-main
+          width: 80%
+          margin: 0 auto
+          .title
+            display: flex
+            align-items: center
+            margin: 28px auto 24px auto
+            .text
+              font-size: 14px
+              font-weight: 700
+              color: rgb(255, 255, 255)
+              margin: auto 12px
+            .line
+              flex: 1
+              background-color: rgba(255, 255, 255, 0.2)
+              width: 1px
+              height: 1px
+              align-items: center
+        .supports
+          margin: 24px auto 28px auto
+          color: rgb(255, 255, 255)
+          font-weight: 200
+          font-size: 12px
+          line-height: 12px
+          & ul li
+            padding: 0 0 12px 12px
+            &:last-child
+              padding-bottom: 0
+          .icon
+            display: inline-block
+            vertical-align: top
+            width: 12px
+            height: 12px
+            margin-right: 4px
+            background-size: 12px 12px
+            background-repeat: no-repeat
+            &.decrease
+              bg-image('decrease_1')
+            &.discount
+              bg-image('discount_1')
+            &.special
+              bg-image('special_1')
+            &.invoice
+              bg-image('invoice_1')
+            &.guarantee
+              bg-image('guarantee_1')
+        .bulletin
+          margin-top: 24px
+          & p
+            font-size: 12px
+            font-weight: 200
+            color: rgb(255, 255, 255)
+            line-height: 24px
+      .details-close
+        font-size: 32px
+        color: rgba(255, 255, 255, 0.5)
+        text-align: center
 
 </style>

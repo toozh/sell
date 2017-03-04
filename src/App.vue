@@ -25,7 +25,7 @@
     name: 'app',
     data () {
       return {
-          seller: {}
+        seller: {}
       };
     },
     created() {
